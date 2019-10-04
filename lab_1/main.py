@@ -15,9 +15,6 @@ def read_from_file(path_to_file: str, lines_limit: int) -> str:
     return text_read
 
 
-text = read_from_file(path_to_file, lines_limit)
-
-
 def calculate_frequences(text: str) -> dict:
     """
     Calculates number of times each word appears in the text
@@ -45,7 +42,8 @@ def calculate_frequences(text: str) -> dict:
     return frequencies
 
 
-frequencies = calculate_frequences(text)
+print(calculate_frequences(text))
+
 
 stop_words = ('a', 'hers', 'm', 'am', 'but', 'did', 'there', 'about', 'me', 'by', 'i', 'don', 'he',
               'once', '', 'during', 'out', 'very', 'if', 'with', 'they', 'own', 'an', 'be', 'all',
@@ -76,7 +74,8 @@ def filter_stop_words(frequencies, stop_words):
         return frequencies
 
 
-frequencies = filter_stop_words(frequencies, stop_words)
+print(filter_stop_words(frequencies, stop_words))
+
 top_n = 10
 
 
@@ -97,8 +96,9 @@ def get_top_n(frequencies: dict, top_n: int) -> tuple:
     return tuple_top_words
 
 
+print(get_top_n(frequencies, top_n))
+
 path_to_file = 'report.txt'
-content = get_top_n(frequencies, top_n)
 
 
 def write_to_file(path_to_file: str, content: tuple):
