@@ -42,9 +42,6 @@ def calculate_frequences(text: str) -> dict:
     return frequencies
 
 
-print(calculate_frequences(text))
-
-
 stop_words = ('a', 'hers', 'm', 'am', 'but', 'did', 'there', 'about', 'me', 'by', 'i', 'don', 'he',
               'once', '', 'during', 'out', 'very', 'if', 'with', 'they', 'own', 'an', 'be', 'all',
               'some', 'for', 'do', 'its', 'yours', 'such', 'into', 'of', 'most', 'itself', 'and',
@@ -74,8 +71,6 @@ def filter_stop_words(frequencies, stop_words):
         return frequencies
 
 
-print(filter_stop_words(frequencies, stop_words))
-
 top_n = 10
 
 
@@ -95,8 +90,6 @@ def get_top_n(frequencies: dict, top_n: int) -> tuple:
         tuple_top_words = ()
     return tuple_top_words
 
-
-print(get_top_n(frequencies, top_n))
 
 path_to_file = 'report.txt'
 
