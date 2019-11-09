@@ -1,6 +1,7 @@
 """
 Labour work #2. Levenshtein distance.
 """
+from typing import List
 
 
 def generate_edit_matrix(num_rows: int, num_cols: int) -> list:
@@ -41,12 +42,11 @@ def fill_edit_matrix(edit_matrix: tuple,
                 for j in range(1, len(M[0])):
                     val_remove = M[i - 1][j] + remove_weight
                     val_add = M[i][j - 1] + add_weight
+                    val_subst = M[i - 1][j - 1]
                     if original_word[i - 1] != target_word[j - 1]:
-                        val_subst = M[i - 1][j - 1] + substitute_weight
-                    else:
-                        val_subst = M[i - 1][j - 1]
-                    numbers = val_add, val_remove, val_subst
-                    M[i][j] = minimum_value(numbers)
+                        val_subst += substitute_weight
+                    values = val_add, val_remove, val_subst
+                    M[i][j] = minimum_value(values)
     return M
 
 
@@ -58,13 +58,28 @@ def find_distance(original_word: str,
     if (isinstance(original_word, str) and isinstance(target_word, str) and isinstance(add_weight, int)
         and isinstance(remove_weight, int) and isinstance(substitute_weight, int)):
         num_rows, num_cols = len(original_word) + 1, len(target_word) + 1
-        mtrix = tuple(generate_edit_matrix(num_rows, num_cols))
-        edit_matrix = tuple(initialize_edit_matrix(mtrix, add_weight, remove_weight))
+        matrix = tuple(generate_edit_matrix(num_rows, num_cols))
+        edit_matrix = tuple(initialize_edit_matrix(matrix, add_weight, remove_weight))
         M = fill_edit_matrix(edit_matrix, add_weight, remove_weight, substitute_weight, original_word, target_word)
-        distance = M[-1][-1]
-    else:
-        distance = -1
-    return distance
+        return M[-1][-1]
+    return -1
 
 
+def save_to_csv(edit_matrix: tuple, path_to_file: str) -> None:
+    with open(path_to_file, 'w') as file_save:
+        for line in edit_matrix:
+            new = [str(elem) for elem in line]
+            row = ','.join(new)
+            file_save.write(row)
+            file_save.write('\n')
 
+
+def load_from_csv(path_to_file: str) -> list:
+    matrix = []
+    with open(path_to_file, 'r') as file_load:
+        for line in file_load:
+            row = []
+            for elem in line.split(','):
+                row.append(int(elem))
+            matrix.append(row)
+    return matrix
