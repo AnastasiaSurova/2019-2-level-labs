@@ -1,7 +1,6 @@
 """
 Labour work #2. Levenshtein distance.
 """
-from typing import List
 
 
 def generate_edit_matrix(num_rows: int, num_cols: int) -> list:
@@ -36,7 +35,7 @@ def fill_edit_matrix(edit_matrix: tuple,
                      target_word: str) -> list:
     M = list(edit_matrix)
     if (M and M.count([]) == 0 and isinstance(original_word, str) and isinstance(target_word, str)
-        and target_word and original_word):
+            and target_word and original_word):
         if isinstance(add_weight, int) and isinstance(remove_weight, int) and isinstance(substitute_weight, int):
             for i in range(1, len(M)):
                 for j in range(1, len(M[0])):
@@ -56,7 +55,7 @@ def find_distance(original_word: str,
                   remove_weight: int,
                   substitute_weight: int) -> int:
     if (isinstance(original_word, str) and isinstance(target_word, str) and isinstance(add_weight, int)
-        and isinstance(remove_weight, int) and isinstance(substitute_weight, int)):
+            and isinstance(remove_weight, int) and isinstance(substitute_weight, int)):
         num_rows, num_cols = len(original_word) + 1, len(target_word) + 1
         matrix = tuple(generate_edit_matrix(num_rows, num_cols))
         edit_matrix = tuple(initialize_edit_matrix(matrix, add_weight, remove_weight))
