@@ -2,13 +2,11 @@
 Labour work #2. Levenshtein distance.
 """
 
-
 def generate_edit_matrix(num_rows: int, num_cols: int) -> list:
     matrix = []
     if isinstance(num_cols, int) and isinstance(num_rows, int):
-        mtrx_cols = [0] * num_cols
         for numb in range(num_rows):
-            matrix.append(mtrx_cols)
+            matrix.append([0] * num_cols)
     return matrix
 
 
