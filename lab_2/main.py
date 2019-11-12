@@ -19,7 +19,8 @@ def initialize_edit_matrix(edit_matrix: tuple, add_weight: int, remove_weight: i
                 matrix[i][0] = matrix[i - 1][0] + remove_weight
             for j in range(1, len(matrix[0])):
                 matrix[0][j] = matrix[0][j - 1] + add_weight
-    return matrix
+        return matrix
+    return []
 
 
 def minimum_value(numbers: tuple) -> int:
