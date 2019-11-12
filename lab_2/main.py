@@ -70,6 +70,7 @@ def save_to_csv(edit_matrix: tuple, path_to_file: str) -> None:
             row = ','.join(new)
             file_save.write(row)
             file_save.write('\n')
+    return None
 
 
 def load_from_csv(path_to_file: str) -> list:
