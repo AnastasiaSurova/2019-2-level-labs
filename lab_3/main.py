@@ -25,10 +25,10 @@ class WordStorage:
         ident = self.storage.get(word, -1)
         return ident
 
-    def get_original_by(self, id: int) -> str:
+    def get_original_by(self, ident: int) -> str:
         if isinstance(id, int):
             for key, value in self.storage.items():
-                if id == value:
+                if ident == value:
                     return key
         return "UNK"
 
@@ -77,7 +77,7 @@ class NGramTrie:
         if prefix not in keys_first_elem:
             return list(prefix)
 
-        prediction = []
+        predictions = []
         probability = []
         for gram in self.gram_log_probabilities.keys():
             if prefix == gram[:self.size - 1]:
@@ -87,18 +87,18 @@ class NGramTrie:
         for key in self.gram_log_probabilities:
             if probability_sort[0] == self.gram_log_probabilities.get(key):
                 for element in prefix:
-                    prediction.append(element)
-                prediction.append(key[-1])
-        for predicted in prediction:
+                    predictions.append(element)
+                predictions.append(key[-1])
+        for predicted in predictions:
             if predicted not in self.next_sentence:
                 self.next_sentence.append(predicted)
-        prefix = tuple(prediction[1:])
+        prefix = tuple(predictions[1:])
         if prefix not in keys_first_elem:
             return self.next_sentence
         return self.predict_next_sentence(prefix)
 
-def encode(storage_instance, corpus) -> list:
 
+def encode(storage_instance, corpus) -> list:
     for sentence in corpus:
         for index, word in enumerate(sentence):
             for keyword, ident in storage_instance.storage.items():
@@ -132,12 +132,11 @@ def split_by_sentence(text: str) -> list:
                 sep_sentence.append(sentence)
     return sep_sentence
 
-text = REFERENCE_TEXT
 
-def prediction(text, prefix):
+def prediction(ref_text, prefix):
     gram = NGramTrie(2)
     storage_instance = WordStorage()
-    sentences = split_by_sentence(text)
+    sentences = split_by_sentence(ref_text)
     for sentence in sentences:
         storage_instance.from_corpus(tuple(sentence))
     corpus = encode(storage_instance, sentences)
