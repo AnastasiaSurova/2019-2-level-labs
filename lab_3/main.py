@@ -5,10 +5,10 @@ Labour work #3
 
 import math
 
-REFERENCE_TEXT = ''
+text = ''
 if __name__ == '__main__':
-    with open('not_so_big_reference_text.txt', 'r') as f:
-        REFERENCE_TEXT = f.read()
+    with open('text.txt', 'r') as f:
+        text = f.read()
 
 
 class WordStorage:
@@ -45,21 +45,18 @@ class NGramTrie:
         self.size = number
         self.gram_frequencies = {}
         self.gram_log_probabilities = {}
-        self.code = []
         self.next_sentence = []
 
     def fill_from_sentence(self, sentence: tuple) -> str:
-        if self.size == 2:
-            if isinstance(sentence, tuple):
-                sentence = list(sentence)
-                for index, element in enumerate(sentence):
-                    if index != len(sentence) - 1:
-                        bi_gram = element, sentence[index + 1]
-                        self.code.append(bi_gram)
-                for bi_gram in self.code:
-                    numb_of_bigram = self.code.count(bi_gram)
-                    self.gram_frequencies[bi_gram] = numb_of_bigram
-                return "OK"
+        if isinstance(sentence, tuple):
+            for index, element in enumerate(sentence):
+                n_gram = sentence[index:index + self.size]
+                if len(n_gram) == self.size:
+                    if n_gram in self.gram_frequencies:
+                        self.gram_frequencies[n_gram] += 1
+                    else:
+                        self.gram_frequencies[n_gram] = 1
+            return "OK"
         return "ERROR"
 
     def calculate_log_probabilities(self):
@@ -76,43 +73,35 @@ class NGramTrie:
         if not prefix or not isinstance(prefix, tuple) or len(prefix) != self.size - 1:
             return self.next_sentence
 
-        prefix_l = list(prefix)
-        print(prefix_l)
-
-        keys_first_elem = [list(keys)[0] for keys in self.gram_log_probabilities.keys()]
-        if prefix_l[0] not in keys_first_elem:
-            return prefix_l
+        keys_first_elem = [keys[:self.size - 1] for keys in self.gram_log_probabilities.keys()]
+        if prefix not in keys_first_elem:
+            return list(prefix)
 
         prediction = []
         probability = []
         for gram in self.gram_log_probabilities.keys():
-            if prefix_l[0] == list(gram)[0]:
+            if prefix == gram[:self.size - 1]:
                 probability.append(self.gram_log_probabilities.get(gram))
         probability_sort = sorted(probability, reverse=True)
-        print(probability)
+
         for key in self.gram_log_probabilities:
             if probability_sort[0] == self.gram_log_probabilities.get(key):
-                key_lst = list(key)
-                print(key_lst)
-                prediction.append(prefix_l[0])
-                print(prediction)
-                prediction.append(key_lst[-1])
-                print(prediction)
-        for p in prediction:
-            if p not in self.next_sentence:
-                self.next_sentence.append(p)
-        print('next_sentence = ', self.next_sentence)
-        prefix = (prediction[-1],)
-        print(prefix)
-        if list(prefix)[0] not in keys_first_elem:
+                for element in prefix:
+                    prediction.append(element)
+                prediction.append(key[-1])
+        for predicted in prediction:
+            if predicted not in self.next_sentence:
+                self.next_sentence.append(predicted)
+        prefix = tuple(prediction[1:])
+        if prefix not in keys_first_elem:
             return self.next_sentence
         return self.predict_next_sentence(prefix)
 
-
 def encode(storage_instance, corpus) -> list:
+
     for sentence in corpus:
         for index, word in enumerate(sentence):
-            for keyword, ident in storage_instance.items():
+            for keyword, ident in storage_instance.storage.items():
                 if word == keyword:
                     sentence[index] = ident
     return corpus
@@ -142,3 +131,22 @@ def split_by_sentence(text: str) -> list:
                 sentence.insert(len(sentence), "</s>")
                 sep_sentence.append(sentence)
     return sep_sentence
+
+def prediction(text, prefix):
+    gram = NGramTrie(2)
+    storage_instance = WordStorage()
+    sentences = split_by_sentence(text)
+    for sentence in sentences:
+        storage_instance.from_corpus(tuple(sentence))
+    corpus = encode(storage_instance, sentences)
+    gram.fill_from_sentence(tuple(corpus))
+    gram.calculate_log_probabilities()
+    prediction = gram.predict_next_sentence(prefix)
+    print(prediction)
+    predicted_sentence = ""
+    for number in prediction:
+        predicted_sentence += storage_instance.get_original_by(number)
+        predicted_sentence += " "
+    print(predicted_sentence)
+
+prediction(text, prefix)
