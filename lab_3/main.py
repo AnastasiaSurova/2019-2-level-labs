@@ -26,7 +26,7 @@ class WordStorage:
         return ident
 
     def get_original_by(self, ident: int) -> str:
-        if isinstance(id, int):
+        if isinstance(ident, int):
             for key, value in self.storage.items():
                 if ident == value:
                     return key
