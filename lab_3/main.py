@@ -5,10 +5,10 @@ Labour work #3
 
 import math
 
-text = ''
+REFERENCE_TEXT = ''
 if __name__ == '__main__':
     with open('text.txt', 'r') as f:
-        text = f.read()
+        REFERENCE_TEXT = f.read()
 
 
 class WordStorage:
@@ -73,7 +73,7 @@ class NGramTrie:
         if not prefix or not isinstance(prefix, tuple) or len(prefix) != self.size - 1:
             return self.next_sentence
 
-        keys_first_elem = [keys[:self.size - 1] for keys in self.gram_log_probabilities.keys()]
+        keys_first_elem = [keys[:self.size - 1] for keys in self.gram_log_probabilities]
         if prefix not in keys_first_elem:
             return list(prefix)
 
@@ -132,6 +132,8 @@ def split_by_sentence(text: str) -> list:
                 sep_sentence.append(sentence)
     return sep_sentence
 
+text = REFERENCE_TEXT
+
 def prediction(text, prefix):
     gram = NGramTrie(2)
     storage_instance = WordStorage()
@@ -141,10 +143,10 @@ def prediction(text, prefix):
     corpus = encode(storage_instance, sentences)
     gram.fill_from_sentence(tuple(corpus))
     gram.calculate_log_probabilities()
-    prediction = gram.predict_next_sentence(prefix)
-    print(prediction)
+    predict = gram.predict_next_sentence(prefix)
+    print(predict)
     predicted_sentence = ""
-    for number in prediction:
+    for number in predict:
         predicted_sentence += storage_instance.get_original_by(number)
         predicted_sentence += " "
     print(predicted_sentence)
