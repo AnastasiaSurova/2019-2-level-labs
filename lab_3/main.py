@@ -148,5 +148,3 @@ def prediction(text, prefix):
         predicted_sentence += storage_instance.get_original_by(number)
         predicted_sentence += " "
     print(predicted_sentence)
-
-prediction(text, prefix)
