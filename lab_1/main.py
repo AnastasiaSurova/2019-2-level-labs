@@ -93,4 +93,3 @@ def write_to_file(path_to_file: str, content: tuple):
         file.write(i)
         file.write('\n')
     file.close()
-    
