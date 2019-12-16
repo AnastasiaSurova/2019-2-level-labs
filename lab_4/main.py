@@ -149,7 +149,7 @@ REFERENCE_TEXTS = []
 
 
 if __name__ == '__main__':
-    given_texts = ['5_7.txt', '15_2.txt', '10547_3.txt', '12230_7.txt']
-    for given_text in given_texts:
+    GIVEN_TEXTS = ['5_7.txt', '15_2.txt', '10547_3.txt', '12230_7.txt']
+    for given_text in GIVEN_TEXTS:
         with open(given_text, 'r') as file:
             REFERENCE_TEXTS.append(file.read())
