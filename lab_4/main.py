@@ -104,7 +104,7 @@ class TfIdfCalculator:
         try:
             if document_index < len(self.tf_idf_values):
                 text = self.tf_idf_values[document_index]
-                new_text = sorted(text, key=lambda word: int(text[word]), reverse=True)
+                new_text = sorted(text, key=lambda word: text[word], reverse=True)
                 if given_word in new_text:
                     report = text.get(given_word, None)
                     ind_word = new_text.index(given_word)
